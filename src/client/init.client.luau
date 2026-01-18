@@ -8,11 +8,10 @@ local Players = game:GetService("Players")
     =========  MODULE  =========
 ]]
 local DynamicFolder = script:WaitForChild("Dynamic")
-local RunSystem = require(script.Static.RunSystem)
 local SoccerSystem = require(script.Static.SoccerSystem)
 local AnimationsHandler = require(DynamicFolder:WaitForChild("AnimationsHandler"))
 
-local StaticFolder = script:WaitForChild("Static")
+
 
 --[[
     =========  CONSTANT  =========
@@ -22,14 +21,9 @@ local LocalPlayer = Players.LocalPlayer
 --[[
     =========  VARIABLE  =========
 ]]
-local RunAnimationTrack
-local SlideAnimationTrack
-local ShootChargeAnimationTrack
-local ShootReleaseAnimationTrack
 --[[
     =========  ASSETS  =========
 ]]
-local SharedFolder = ReplicatedStorage:WaitForChild("Shared")
 local Animations = ReplicatedStorage:WaitForChild("Animations")
 
 --[[
@@ -55,9 +49,7 @@ AnimationsHandler.SetAnimations({
 
 local function OnCharAdded(character)
 	local animationTrackTable = AnimationsHandler.loadAnimations(LocalPlayer, {RUN_ANIMATION, SLIDE_ANIMATION, SHOOT_CHARGE_ANIMATION, SHOOT_RELEASE_ANIMATION})
-	local humanoid = character:WaitForChild("Humanoid")
-	RunSystem.UpdateTrack(humanoid, animationTrackTable.Running)
-    SoccerSystem.Update(character, animationTrackTable.Slide, animationTrackTable["Shoot Charge"], animationTrackTable["Shoot Release"])
+    SoccerSystem.Update(character, animationTrackTable.Running, animationTrackTable.Slide, animationTrackTable["Shoot Charge"], animationTrackTable["Shoot Release"])
 end
 
 if LocalPlayer.Character then
@@ -66,5 +58,4 @@ end
 
 LocalPlayer.CharacterAdded:Connect(OnCharAdded)
 
-RunSystem.GlobalInit()
 SoccerSystem.GlobalInit()

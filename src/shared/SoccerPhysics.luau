@@ -46,7 +46,11 @@ function SoccerPhysics.applySlide(rootPart: BasePart): BodyVelocity
 end
 
 function SoccerPhysics.applyShoot(ballPart: BasePart, lookVector: Vector3, chargePower: number)
-    ballPart.AssemblyLinearVelocity = SoccerPhysics.calculateShootVelocity(lookVector, chargePower)
+    local velocity = SoccerPhysics.calculateShootVelocity(lookVector, chargePower)
+    ballPart.AssemblyLinearVelocity = velocity
+    
+    local torque = lookVector:Cross(Vector3.new(0, 1, 0)) * chargePower * 5
+    ballPart:ApplyAngularImpulse(torque)
 end
 
 return SoccerPhysics
