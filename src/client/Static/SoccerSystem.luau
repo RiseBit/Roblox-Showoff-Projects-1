@@ -138,18 +138,17 @@ local function chargeShoot()
     if IsCharge then return end
     IsCharge = true
 
+    local config = SoccerPhysics.Shoot
+    local chargeTime = (config.ChargeMax / config.ChargeIncrement) * config.ChargeTick
+    local animLength = ShootChargeAnimationTrack.Length - .1 -- buffer
+    local animSpeed = animLength / chargeTime * 0.95
+
     ShootChargeAnimationTrack:Play()
-    ShootChargeAnimationTrack.Stopped:Once(function()
-        if IsCharge then
-            ShootChargeAnimationTrack:Play()
-            ShootChargeAnimationTrack:AdjustSpeed(0)
-        end
-    end)
+    ShootChargeAnimationTrack:AdjustSpeed(animSpeed)
 
     humanoid.WalkSpeed = 2
 
     task.spawn(function()
-        local config = SoccerPhysics.Shoot
         while IsCharge and ChargePower < config.ChargeMax do
             ChargePower = math.min(ChargePower + config.ChargeIncrement, config.ChargeMax)
             task.wait(config.ChargeTick)
